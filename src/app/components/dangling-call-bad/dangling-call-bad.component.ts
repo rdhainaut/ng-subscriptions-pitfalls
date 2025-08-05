@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 
 @Component({
-  selector: 'app-bad',
+  selector: 'app-dangling-call-bad',
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -58,7 +58,7 @@ import { UserService } from '../../services/user.service';
     }
   `]
 })
-export class BadComponent implements OnInit, OnDestroy {
+export class DanglingCallBadComponent implements OnInit, OnDestroy {
   userData: any = null;
   currentUserId = 1;
   private componentDestroyed = false;
@@ -66,22 +66,22 @@ export class BadComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService) {}
 
   ngOnInit() {
-    console.log(`🔴 BAD COMPONENT créé`);
+    console.log(`🔴 DANGLING CALL BAD COMPONENT créé`);
   }
 
   ngOnDestroy() {
     this.componentDestroyed = true;
-    console.log(`💀 BAD COMPONENT détruit`);
+    console.log(`💀 DANGLING CALL BAD COMPONENT détruit`);
     console.log(`⚠️  ATTENTION: Souscription orpheline - HTTP callback va s'exécuter !`);
   }
 
   loadUserData() {
     // ❌ PROBLÈME: Pas de takeUntilDestroyed() ici !
     // Le callback continue de s'exécuter même après la destruction du composant
-    this.userService.getUserData(this.currentUserId, 'BAD COMPONENT').subscribe({
+    this.userService.getUserData(this.currentUserId, 'DANGLING CALL BAD COMPONENT').subscribe({
       next: (data) => {
         if (this.componentDestroyed) {
-          console.error(`🚨 ERREUR CRITIQUE ! BadComponent détruit mais callback exécuté !`);
+          console.error(`🚨 ERREUR CRITIQUE ! DanglingCallBadComponent détruit mais callback exécuté !`);
           console.error(`💥 Tentative de mise à jour d'un composant détruit - ceci peut causer des erreurs !`);
           console.error(`📊 Données reçues:`, data);
           
@@ -93,12 +93,12 @@ export class BadComponent implements OnInit, OnDestroy {
             console.error(`💀 Erreur lors de la mutation:`, error);
           }
         } else {
-          console.log(`✅ [BAD COMPONENT] RÉPONSE HTTP reçue correctement`);
+          console.log(`✅ [DANGLING CALL BAD COMPONENT] RÉPONSE HTTP reçue correctement`);
           this.userData = data;
         }
       },
       error: (error) => {
-        console.error('❌ Erreur dans BadComponent:', error);
+        console.error('❌ Erreur dans DanglingCallBadComponent:', error);
       }
     });
   }

@@ -1,29 +1,52 @@
 <div class="app-container">
-  <h1>🧪 Démonstration de souscriptions orphelines avec Observables HTTP</h1>
+  <h1>🧪 Souscriptions Angular : Bonnes et mauvaises pratiques</h1>
   
-  <div class="instructions">
-    <h3>📋 Instructions pour observer la souscription orpheline:</h3>
-    <ol>
-      <li><strong>Ouvrez la console du navigateur (F12)</strong></li>
-      <li><strong>Allez sur "Bad Component"</strong> et cliquez <strong>"Charger utilisateur"</strong></li>
-      <li><strong>Changez IMMÉDIATEMENT vers "Good Component"</strong> (pendant les 3 secondes d'attente)</li>
-      <li><strong>Observez la console :</strong> 
-        <ul>
-          <li>🚨 <strong>SOUSCRIPTION ORPHELINE</strong> = Bad Component reçoit encore la réponse HTTP après destruction !</li>
-          <li>✅ <strong>CORRECT</strong> = Good Component n'aura pas de réponse après destruction</li>
-        </ul>
-      </li>
-      <li><strong>Répétez le test avec "Good Component"</strong> pour voir la différence</li>
-    </ol>
-  </div>
+  <div class="demo-sections">
+    <!-- Section HTTP Observables -->
+    <div class="demo-section">
+      <h2>🌐 Souscriptions orphelines HTTP</h2>
+      <div class="instructions">
+        <h3>📋 Test des souscriptions HTTP orphelines:</h3>
+        <ol>
+          <li><strong>Ouvrez la console (F12)</strong></li>
+          <li><strong>Allez sur "Dangling Call Bad Component"</strong> et cliquez <strong>"Charger utilisateur"</strong></li>
+          <li><strong>Naviguez IMMÉDIATEMENT vers "Dangling Call Good Component"</strong> (pendant les 3 secondes d'attente)</li>
+          <li><strong>Console :</strong> Dangling Call Bad Component reçoit encore la réponse HTTP après destruction ! 🚨</li>
+        </ol>
+      </div>
 
-  <div class="navigation">
-    <a routerLink="/bad" routerLinkActive="active" class="nav-button danger">
-      🔴 Bad Component (avec souscription orpheline)
-    </a>
-    <a routerLink="/good" routerLinkActive="active" class="nav-button success">
-      ✅ Good Component (sans souscription orpheline)
-    </a>
+      <div class="navigation">
+        <a routerLink="/dangling-call-bad" routerLinkActive="active" class="nav-button danger">
+          🔴 Dangling Call Bad Component (avec souscription orpheline)
+        </a>
+        <a routerLink="/dangling-call-good" routerLinkActive="active" class="nav-button success">
+          ✅ Dangling Call Good Component (sans souscription orpheline)
+        </a>
+      </div>
+    </div>
+
+    <!-- Section Interval Observables -->
+    <div class="demo-section">
+      <h2>⏱️ Fuites mémoire d'intervalles</h2>
+      <div class="instructions">
+        <h3>📋 Test des fuites mémoire d'intervalles:</h3>
+        <ol>
+          <li><strong>Allez sur "Interval Bad Component"</strong> et cliquez <strong>"Démarrer intervalle"</strong></li>
+          <li><strong>Naviguez vers "Interval Good Component"</strong> rapidement</li>
+          <li><strong>Console :</strong> L'intervalle continue de tourner en arrière-plan ! 🚨</li>
+          <li><strong>Répétez avec "Interval Good Component"</strong> : l'intervalle s'arrête automatiquement ✅</li>
+        </ol>
+      </div>
+
+      <div class="navigation">
+        <a routerLink="/interval-bad" routerLinkActive="active" class="nav-button danger">
+          🔴 Interval Bad (avec fuite mémoire)
+        </a>
+        <a routerLink="/interval-good" routerLinkActive="active" class="nav-button success">
+          ✅ Interval Good (sans fuite mémoire)
+        </a>
+      </div>
+    </div>
   </div>
   
   <div class="console-hint">

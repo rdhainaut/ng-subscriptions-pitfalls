@@ -4,7 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserService } from '../../services/user.service';
 
 @Component({
-  selector: 'app-good',
+  selector: 'app-dangling-call-good',
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -59,7 +59,7 @@ import { UserService } from '../../services/user.service';
     }
   `]
 })
-export class GoodComponent implements OnInit, OnDestroy {
+export class DanglingCallGoodComponent implements OnInit, OnDestroy {
   userData: any = null;
   currentUserId = 1;
   private takeUntilDestroyed = takeUntilDestroyed();
@@ -68,32 +68,32 @@ export class GoodComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService) {}
 
   ngOnInit() {
-    console.log(`✅ GOOD COMPONENT créé`);
+    console.log(`✅ DANGLING CALL GOOD COMPONENT créé`);
   }
 
   ngOnDestroy() {
     this.componentDestroyed = true;
-    console.log(`💀 GOOD COMPONENT détruit`);
+    console.log(`💀 DANGLING CALL GOOD COMPONENT détruit`);
     console.log(`✅ Souscription automatiquement arrêtée avec takeUntilDestroyed()`);
   }
 
   loadUserData() {
     // ✅ SOLUTION: Utilisation de takeUntilDestroyed()
     // La souscription s'arrête automatiquement à la destruction du composant
-    this.userService.getUserData(this.currentUserId, 'GOOD COMPONENT')
+    this.userService.getUserData(this.currentUserId, 'DANGLING CALL GOOD COMPONENT')
       .pipe(this.takeUntilDestroyed)
       .subscribe({
         next: (data) => {
           if (this.componentDestroyed) {
             // Ceci ne devrait JAMAIS se produire grâce à takeUntilDestroyed
-            console.error(`💥 ERREUR INATTENDUE ! GoodComponent callback exécuté après destruction !`);
+            console.error(`💥 ERREUR INATTENDUE ! DanglingCallGoodComponent callback exécuté après destruction !`);
           } else {
-            console.log(`✅ [GOOD COMPONENT] RÉPONSE HTTP reçue correctement`);
+            console.log(`✅ [DANGLING CALL GOOD COMPONENT] RÉPONSE HTTP reçue correctement`);
             this.userData = data;
           }
         },
         error: (error) => {
-          console.error('❌ Erreur dans GoodComponent:', error);
+          console.error('❌ Erreur dans DanglingCallGoodComponent:', error);
         }
       });
   }

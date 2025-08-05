@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(rm:*)",
-      "Bash(ng serve)"
+      "Bash(ng serve)",
+      "Bash(ng build)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }
