@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ng-memory-leaks-sample": {
+    "ng-subscriptions-pitfalls": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/ng-memory-leaks-sample",
+            "outputPath": "dist/ng-subscriptions-pitfalls",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -59,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ng-memory-leaks-sample:build:production"
+              "buildTarget": "ng-subscriptions-pitfalls:build:production"
             },
             "development": {
-              "buildTarget": "ng-memory-leaks-sample:build:development"
+              "buildTarget": "ng-subscriptions-pitfalls:build:development"
             }
           },
           "defaultConfiguration": "development"

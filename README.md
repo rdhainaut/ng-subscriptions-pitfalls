@@ -1,59 +1,57 @@
-# NgMemoryLeaksSample
+# NgDanglingSubscriptionSample - Démonstration des souscriptions orphelines avec HTTP Observables
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.1.
+Ce projet démontre les souscriptions orphelines (dangling subscriptions) dans Angular causées par des observables HTTP non-annulés, ainsi que la solution avec `takeUntilDestroyed()`.
 
-## Development server
+## 🚀 Installation
 
-To start a local development server, run:
+1. **Extraire l'archive** dans un dossier
+2. **Installer les dépendances** :
+   ```bash
+   npm install
+   ```
+3. **Lancer le serveur de développement** :
+   ```bash
+   ng serve
+   ```
+4. **Ouvrir** http://localhost:4200/ dans votre navigateur
 
-```bash
-ng serve
-```
+## 🧪 Comment utiliser la démonstration
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Étapes pour observer la souscription orpheline :
 
-## Code scaffolding
+1. **Ouvrez la console du navigateur (F12)**
+2. **Allez sur "Bad Component"** et cliquez **"Charger utilisateur"**
+3. **Changez IMMÉDIATEMENT vers "Good Component"** (pendant les 3 secondes d'attente)
+4. **Observez la console :**
+   - 🚨 **SOUSCRIPTION ORPHELINE** = Bad Component reçoit encore la réponse HTTP après destruction !
+   - ✅ **CORRECT** = Good Component n'aura pas de réponse après destruction
+5. **Répétez le test avec "Good Component"** pour voir la différence
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 📋 Explication technique
 
-```bash
-ng generate component component-name
-```
+### Bad Component (🔴 Avec souscription orpheline)
+- **Problème** : Pas de `takeUntilDestroyed()` 
+- **Résultat** : Les callbacks HTTP s'exécutent encore après destruction du composant
+- **Fichier** : `src/app/components/bad/bad.component.ts`
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Good Component (✅ Sans souscription orpheline)  
+- **Solution** : Utilise `takeUntilDestroyed()` (Angular 16+)
+- **Résultat** : Les souscriptions HTTP s'arrêtent automatiquement à la destruction
+- **Fichier** : `src/app/components/good/good.component.ts`
 
-```bash
-ng generate --help
-```
+### UserService
+- Simule des appels HTTP lents (3 secondes) pour laisser le temps de naviguer
+- Logs clairs pour identifier quel composant reçoit les réponses
+- **Fichier** : `src/app/services/user.service.ts`
 
-## Building
+## 🛠️ Versions
 
-To build the project run:
+- **Angular** : 19.0.1
+- **Node.js** : Compatible avec les versions LTS récentes
+- **TypeScript** : 5.6.2
 
-```bash
-ng build
-```
+## 📖 Ressources
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular takeUntilDestroyed](https://angular.dev/api/core/rxjs-interop/takeUntilDestroyed)
+- [RxJS Subscription Management](https://rxjs.dev/guide/subscription)
+- [Angular CLI](https://angular.dev/tools/cli)
